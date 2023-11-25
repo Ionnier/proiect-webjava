@@ -25,16 +25,16 @@ public class Report implements Serializable {
     private String message;
     private Resolution resolution = Resolution.NOT_VERIFIED;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne
     public User createdBy;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne
     public User resolvedBy;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne
     public Comment comment;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne
     public Post post;
 
     @PrePersist

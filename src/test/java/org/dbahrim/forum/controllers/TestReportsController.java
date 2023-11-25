@@ -114,13 +114,13 @@ public class TestReportsController {
     @Test
     public void reportCommentAsUserWorks() throws Exception
     {
-        performReportAsUser("/api/reports/comment/3").andExpect(status().isOk());
+        performReportAsUser("/api/reports/comment/1").andExpect(status().isOk());
     }
 
     @Test
     public void reportPostAsUserWorks() throws Exception
     {
-        performReportAsUser("/api/reports/post/2").andExpect(status().isOk());
+        performReportAsUser("/api/reports/post/1").andExpect(status().isOk());
     }
 
     private ResultActions performReportAsUser(String url) throws Exception {
