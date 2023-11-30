@@ -25,15 +25,15 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
 
     @NotBlank(message="Name is required")
     @Size(min=5, message="Name must be at least 5 characters long")
-    private String name;
+    public String name;
 
     @NotBlank(message="Description is required")
     @Size(min=30, message="Description must be at least 30 characters long")
-    private String description;
+    public String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
     private final List<Post> postList;

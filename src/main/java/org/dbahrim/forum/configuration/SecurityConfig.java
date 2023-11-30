@@ -3,8 +3,10 @@ package org.dbahrim.forum.configuration;
 import lombok.RequiredArgsConstructor;
 import org.dbahrim.forum.configuration.security.JwtFilter;
 import org.dbahrim.forum.configuration.security.UserService;
+import org.dbahrim.forum.controllers.AuthController;
 import org.dbahrim.forum.data.UserRepository;
 import org.dbahrim.forum.models.User;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -57,7 +59,13 @@ public class SecurityConfig {
                 .requestMatchers("/api/posts/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/reports/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/vote/**").authenticated()
+                .requestMatchers(HttpMethod.GET,"/api/docs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/swagger-ui**").permitAll()
                 .requestMatchers("/" + RestConfiguration.BASE_PATH + "/**").hasRole(ROLE_ADMIN)
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/api/docs/**").permitAll()
+                .requestMatchers("/api/docs").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
                 .anyRequest().denyAll()
             )
             .csrf(CsrfConfigurer::disable)

@@ -1,6 +1,11 @@
 package org.dbahrim.forum.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dbahrim.forum.data.CommentRepository;
@@ -31,6 +36,28 @@ public class VoteController {
     }
 
     @PostMapping("/{type}/{way}/{id}")
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Vote on a post or comment")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content
+                    )
+            }
+    )
     public void vote(@AuthenticationPrincipal User user,
                                    @PathVariable Types type,
                                    @PathVariable Way way,

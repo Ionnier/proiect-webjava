@@ -2,6 +2,12 @@ package org.dbahrim.forum.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +44,51 @@ public class ReportController {
     private ReportMapper reportMapper;
 
     @GetMapping
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Get all reports")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Report.class) )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = @Content
+            )
+        }
+    )
     public Iterable<Report> getAll() {
         return reportRepository.findAll();
     }
 
     @PostMapping("/comment/{id}")
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Add a report to a comment")
+    @ApiResponses(
+        value = {
+                @ApiResponse(
+                        responseCode = "200",
+                        content = {
+                                @Content(mediaType = "application/json", schema = @Schema(implementation = Report.class) )
+                        }
+                ),
+                @ApiResponse(
+                        responseCode = "400",
+                        content = @Content
+                ),
+                @ApiResponse(
+                        responseCode = "403",
+                        content = @Content
+                ),
+                @ApiResponse(
+                        responseCode = "404",
+                        content = @Content
+                )
+        }
+    )
     public Report addCommentReport(@AuthenticationPrincipal User user,
                                    @PathVariable Long id,
                                    @RequestBody Report.ReportDto dto, ObjectMapper objectMapper) throws ErrorController.NotFoundException, JsonProcessingException {
@@ -55,6 +101,30 @@ public class ReportController {
     }
 
     @PostMapping("/post/{id}")
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Add a report to a post")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = Report.class) )
+                }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    content = @Content
+            )
+        }
+    )
     public Report addPostReport(@AuthenticationPrincipal User user,
                              @PathVariable Long id,
                              @RequestBody Report.ReportDto dto) throws ErrorController.NotFoundException {
@@ -67,6 +137,30 @@ public class ReportController {
 
     @PatchMapping("/{id}")
     @Transactional
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Solve a report")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Report.class) )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    content = @Content
+            )
+        }
+    )
     public Report resolveReport(@AuthenticationPrincipal User user,
                                 @PathVariable Long id,
                                 @RequestBody Report.ReportResolution dto) throws ErrorController.NotFoundException {

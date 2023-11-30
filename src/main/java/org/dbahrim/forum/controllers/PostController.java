@@ -1,5 +1,11 @@
 package org.dbahrim.forum.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +38,68 @@ public class PostController {
     private final PostMapper postMapper;
 
     @GetMapping
+    @Operation(summary = "Get all posts")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                        @Content(
+                                mediaType = "application/json",
+                                schema = @Schema(implementation = Post.class)
+                        )
+                }
+            )
+        }
+    )
     public Iterable<Post> getAll() {
         return postRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get one post")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = Post.class)
+                    )
+                }
+            )
+        }
+    )
     public Post getOne(@PathVariable Long id) throws NotFoundException {
         return postRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Create a post")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Post.class)
+                    )
+                }
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "Validation error",
+                content = @Content
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content
+            )
+        }
+    )
     public Post insert(@RequestBody @Valid Post.PostPostRequest dto, @AuthenticationPrincipal User user) throws NotFoundException {
         Category category = categoryRepository.findById(dto.categoryId).orElseThrow(NotFoundException::new);
         Post post = postMapper.toPost(dto);
@@ -51,6 +109,33 @@ public class PostController {
 
     @PostMapping("/{id}")
     @Transactional
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Add a comment")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = Post.class)
+                    )
+                }
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content
+            )
+        }
+    )
     public Post comment(@PathVariable Long id, @RequestBody @Valid Comment.CommentPost commentPost, @AuthenticationPrincipal User user, CommentMapper commentMapper) throws NotFoundException {
         Post post = postRepository.findById(id).orElseThrow(NotFoundException::new);
         Comment comment = commentMapper.sourceToDestination(commentPost);
@@ -61,6 +146,33 @@ public class PostController {
     }
 
     @PutMapping
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Fully edit a post")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = Post.class)
+                    )
+                }
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content
+            )
+        }
+    )
     public Post edit(@RequestBody @Valid Post.PostPutPatchRequest postPutPatchRequest, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(postPutPatchRequest.getId()).orElseThrow(NotFoundException::new);
         if (post.user != user) {
@@ -74,6 +186,34 @@ public class PostController {
     }
 
     @PatchMapping
+    @SecurityRequirement(name = "bearer")
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Partially edit a post")
+    @ApiResponses(
+            value = {
+                @ApiResponse(
+                        responseCode = "200",
+                        content = {
+                                @Content(
+                                        mediaType = "application/json",
+                                        schema = @Schema(implementation = Post.class)
+                                )
+                        }
+                ),
+                @ApiResponse(
+                        responseCode = "400",
+                        content = @Content
+                ),
+                @ApiResponse(
+                        responseCode = "403",
+                        content = @Content
+                ),
+                @ApiResponse(
+                        responseCode = "404",
+                        content = @Content
+                )
+            }
+    )
     public Post patch(@RequestBody @Valid Post.PostPutPatchRequest postPutPatchRequest, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(postPutPatchRequest.getId()).orElseThrow(NotFoundException::new);
         if (post.user != user) {
@@ -88,6 +228,28 @@ public class PostController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @SecurityRequirement(name = "bearer")
+    @Operation(summary = "Delete a post")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content
+                    )
+            }
+    )
     public void delete(@PathVariable Long id, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(id).orElseThrow(NotFoundException::new);
         if (post.user != user) {
