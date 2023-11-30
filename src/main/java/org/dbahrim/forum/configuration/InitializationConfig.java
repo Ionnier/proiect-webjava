@@ -53,6 +53,7 @@ public class InitializationConfig {
         Comment comment = new Comment();
         comment.setUser(user);
         comment.setContent(content);
+        comment.postId = post.id;
         post.addComment(comment);
         postRepository.save(post);
     }

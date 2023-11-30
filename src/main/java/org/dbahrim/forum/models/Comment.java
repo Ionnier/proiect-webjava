@@ -2,17 +2,17 @@ package org.dbahrim.forum.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.mapstruct.Mapper;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -22,7 +22,7 @@ public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private final Long id;
 
     private Date createdAt;
@@ -32,6 +32,16 @@ public class Comment implements Serializable {
 
     @ManyToOne
     private User user;
+
+    public Long postId;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id")
+    public Set<User> upvotedBy = Collections.emptySet();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id")
+    public Set<User> dislikedBy = Collections.emptySet();
 
     @PrePersist
     void prePersist() {

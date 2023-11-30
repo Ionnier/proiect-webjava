@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,13 +24,17 @@ public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    public Long id;
 
     private Date createdAt;
 
+    @NotNull
+    @NotBlank
     public String title;
 
+    @NotNull
+    @NotBlank
     public String content;
 
     @ManyToOne
@@ -38,8 +44,18 @@ public class Post implements Serializable {
     @JoinColumn(name="category.id", nullable=false)
     public Category category;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    @JoinColumn(referencedColumnName = "id")
     public List<Comment> comments = Collections.emptyList();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id")
+    public Set<User> upvotedBy = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id")
+    public Set<User> dislikedBy = new HashSet<>();
 
     public Post(Category category, User user, String content, String title) {
         this.category = category;

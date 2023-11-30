@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,12 +20,12 @@ public class Report implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Long id;
 
     private Date createdAt;
-    private String message;
-    private Resolution resolution = Resolution.NOT_VERIFIED;
+    public String message;
+    public Resolution resolution = Resolution.NOT_VERIFIED;
 
     @ManyToOne
     public User createdBy;
@@ -32,9 +34,11 @@ public class Report implements Serializable {
     public User resolvedBy;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     public Comment comment;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     public Post post;
 
     @PrePersist
@@ -52,5 +56,16 @@ public class Report implements Serializable {
     public static class ReportDto {
         @NotBlank(message = "Message should not be empty")
         public String message;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+    public static class ReportResolution {
+        @NotBlank(message = "Message should not be empty")
+        public String message;
+
+        @NotNull
+        public Resolution resolution;
     }
 }

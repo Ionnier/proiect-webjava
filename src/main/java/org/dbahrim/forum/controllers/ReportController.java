@@ -20,7 +20,9 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Slf4j
@@ -63,4 +65,37 @@ public class ReportController {
         return reportRepository.save(report);
     }
 
+    @PatchMapping("/{id}")
+    @Transactional
+    public Report resolveReport(@AuthenticationPrincipal User user,
+                                @PathVariable Long id,
+                                @RequestBody Report.ReportResolution dto) throws ErrorController.NotFoundException {
+        Report report = reportRepository.findById(id).orElseThrow(ErrorController.NotFoundException::new);
+        report.resolvedBy = user;
+        report.resolution = dto.resolution;
+        report.message = dto.message;
+        switch (report.resolution) {
+            case CLEANED -> {
+                if (report.comment != null) {
+                    report.comment.setContent(dto.message);
+                    commentRepository.save(report.comment);
+                } else {
+                    report.post.content = dto.message;
+                    postRepository.save(report.post);
+                }
+            }
+            case DELETED -> {
+                if (report.comment != null) {
+                    Post post = postRepository
+                            .findById(report.comment.postId)
+                            .orElseThrow(ErrorController.NotFoundException::new);
+                    post.comments.removeIf(e -> Objects.equals(e.getId(), report.comment.getId()));
+                    postRepository.save(post);
+                } else {
+                    postRepository.deleteById(report.post.id);
+                }
+            }
+        }
+        return reportRepository.save(report);
+    }
 }

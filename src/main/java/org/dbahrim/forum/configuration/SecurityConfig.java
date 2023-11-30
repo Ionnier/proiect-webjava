@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/categories/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/posts/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/reports/**").hasRole(ROLE_ADMIN)
+                .requestMatchers("/api/vote/**").authenticated()
                 .requestMatchers("/" + RestConfiguration.BASE_PATH + "/**").hasRole(ROLE_ADMIN)
                 .anyRequest().denyAll()
             )

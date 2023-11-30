@@ -35,15 +35,15 @@ public class CategoryController {
     }
 
     @PutMapping
-    public Category edit(@RequestBody @Valid Category.CategoryRequestBodyPutPatch categoryRequestBodyPutPatch) throws NotFoundException {
+    public Category edit(@RequestBody @Valid Category.CategoryRequestBodyPutPatch categoryRequestBodyPutPatch) throws NotFoundException, ErrorController.BadRequest {
         Category category = categoryRepository.findById(categoryRequestBodyPutPatch.getId()).orElseThrow(NotFoundException::new);
-        return categoryRepository.save(category.fromPatch(categoryRequestBodyPutPatch, false).orElseThrow(NotFoundException::new));
+        return categoryRepository.save(category.fromPatch(categoryRequestBodyPutPatch, false).orElseThrow(ErrorController.BadRequest::new));
     }
 
     @PatchMapping
-    public Category patch(@RequestBody Category.CategoryRequestBodyPutPatch categoryRequestBodyPutPatch) throws NotFoundException {
+    public Category patch(@RequestBody Category.CategoryRequestBodyPutPatch categoryRequestBodyPutPatch) throws NotFoundException, ErrorController.BadRequest {
         Category category = categoryRepository.findById(categoryRequestBodyPutPatch.getId()).orElseThrow(NotFoundException::new);
-        return categoryRepository.save(category.fromPatch(categoryRequestBodyPutPatch, true).orElseThrow(NotFoundException::new));
+        return categoryRepository.save(category.fromPatch(categoryRequestBodyPutPatch, true).orElseThrow(ErrorController.BadRequest::new));
     }
 
     @DeleteMapping("/{id}")

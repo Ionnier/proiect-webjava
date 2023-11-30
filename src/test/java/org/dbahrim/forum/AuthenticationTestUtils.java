@@ -7,6 +7,8 @@ import org.hibernate.sql.results.graph.collection.internal.MapInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.net.http.HttpHeaders;
 import java.util.Collections;
@@ -24,6 +26,14 @@ public class AuthenticationTestUtils {
 
     public String admin() {
         return "Bearer " + authenticationService.signIn(new UserRequest("admin@cti.ro", "ciscoconpa55"));
+    }
+
+    public MockHttpServletRequestBuilder addUserHeader(MockHttpServletRequestBuilder builder) {
+        return builder.header(authorization, user());
+    }
+
+    public MockHttpServletRequestBuilder addAdminHeader(MockHttpServletRequestBuilder builder) {
+        return builder.header(authorization, admin());
     }
 
 }

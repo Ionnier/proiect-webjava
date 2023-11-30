@@ -55,8 +55,8 @@ public class PostController {
         Post post = postRepository.findById(id).orElseThrow(NotFoundException::new);
         Comment comment = commentMapper.sourceToDestination(commentPost);
         comment.setUser(user);
+        comment.postId = post.id;
         post.addComment(comment);
-        commentRepository.save(comment);
         return postRepository.save(post);
     }
 

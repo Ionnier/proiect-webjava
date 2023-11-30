@@ -39,15 +39,20 @@ public class ErrorController
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-    @ExceptionHandler(value
-            = {NotFoundException.class})
-    protected ResponseEntity<Object> notFound (
-            NotFoundException ex, WebRequest request) {
+    @ExceptionHandler(value = {SimpleCodeSetter.class})
+    protected ResponseEntity<Object> simpleCodeSetter (
+            SimpleCodeSetter ex, WebRequest request) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        if (ex instanceof NotFoundException) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        } else if (ex instanceof BadRequest) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
         return handleExceptionInternal(ex, null,
-                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+                new HttpHeaders(), httpStatus, request);
     }
-    
-    public static class NotFoundException extends Exception {
-        
-    }
+
+    private abstract static class SimpleCodeSetter extends Exception {};
+    public static class NotFoundException extends SimpleCodeSetter { }
+    public static class BadRequest extends SimpleCodeSetter { }
 }

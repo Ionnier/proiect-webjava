@@ -23,5 +23,5 @@ They will work like any other forum application.
 and they can Sign Up / Log In.
 * All users will be able to write posts and reply to posts via comments.
 * Users will be able to mark posts/comments as reported, giving an optional reason as a text. Admins will be able to respond to these reports, delete, clean (remove message and mark as removed by an admin giving a reason) or ignore the report.
-* Based on communication preferences, users will be notified when a post they create will be updated, and they can follow other posts to be notified as well.
+* Logged in users will be able to like / dislike a post.
 

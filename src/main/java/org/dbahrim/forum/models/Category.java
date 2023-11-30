@@ -5,10 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,7 +24,7 @@ public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message="Name is required")
@@ -51,7 +49,7 @@ public class Category implements Serializable {
         if (!Objects.equals(this.id, patch.getId())) {
             return Optional.empty();
         }
-        if (!isPatch && patch.description == null && patch.name == null) {
+        if (!isPatch && (patch.description == null || patch.name == null)) {
             return Optional.empty();
         }
         if (patch.description != null) {
@@ -77,16 +75,13 @@ public class Category implements Serializable {
 
     @Data
     @AllArgsConstructor
+    @Builder(toBuilder=true)
     public static class CategoryRequestBodyPutPatch {
         @NotNull
         private final Long id;
 
-        @NotBlank(message="Name is required")
-        @Size(min=5, message="Name must be at least 5 characters long")
         private final String name;
 
-        @NotBlank(message="Description is required")
-        @Size(min=30, message="Description must be at least 30 characters long")
         private final String description;
     }
 }
