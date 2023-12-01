@@ -49,8 +49,8 @@ public class Comment implements Serializable {
     }
 
     @Data
-    @NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
-    public class CommentPost {
+    @NoArgsConstructor(access= AccessLevel.PUBLIC, force=true)
+    public static class CommentPost {
         public final String content;
     }
 }

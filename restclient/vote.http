@@ -1,0 +1,3 @@
+### Cast vote
+POST {{base_url}}/vote/post/up/1
+Authorization: Bearer {{token}}

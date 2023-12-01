@@ -26,6 +26,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @Slf4j
 @CrossOrigin(origins="*")
@@ -36,6 +38,7 @@ public class PostController {
     private final CategoryRepository categoryRepository;
     private final CommentRepository commentRepository;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 
     @GetMapping
     @Operation(summary = "Get all posts")
@@ -104,6 +107,7 @@ public class PostController {
         Category category = categoryRepository.findById(dto.categoryId).orElseThrow(NotFoundException::new);
         Post post = postMapper.toPost(dto);
         post.category = category;
+        post.user = user;
         return postRepository.save(post);
     }
 
@@ -136,7 +140,7 @@ public class PostController {
             )
         }
     )
-    public Post comment(@PathVariable Long id, @RequestBody @Valid Comment.CommentPost commentPost, @AuthenticationPrincipal User user, CommentMapper commentMapper) throws NotFoundException {
+    public Post comment(@PathVariable Long id, @RequestBody @Valid Comment.CommentPost commentPost, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(id).orElseThrow(NotFoundException::new);
         Comment comment = commentMapper.sourceToDestination(commentPost);
         comment.setUser(user);
@@ -175,7 +179,7 @@ public class PostController {
     )
     public Post edit(@RequestBody @Valid Post.PostPutPatchRequest postPutPatchRequest, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(postPutPatchRequest.getId()).orElseThrow(NotFoundException::new);
-        if (post.user != user) {
+        if (!Objects.equals(post.user.getId(), user.getId())) {
             throw new AccessDeniedException("Requires same user");
         }
         Category newCategory = null;
@@ -216,7 +220,7 @@ public class PostController {
     )
     public Post patch(@RequestBody @Valid Post.PostPutPatchRequest postPutPatchRequest, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(postPutPatchRequest.getId()).orElseThrow(NotFoundException::new);
-        if (post.user != user) {
+        if (!Objects.equals(post.user.getId(), user.getId())) {
             throw new AccessDeniedException("Requires same user");
         }
         Category newCategory = null;
@@ -252,7 +256,7 @@ public class PostController {
     )
     public void delete(@PathVariable Long id, @AuthenticationPrincipal User user) throws NotFoundException {
         Post post = postRepository.findById(id).orElseThrow(NotFoundException::new);
-        if (post.user != user) {
+        if (!Objects.equals(post.user.getId(), user.getId())) {
             throw new AccessDeniedException("Requires same user");
         }
         postRepository.deleteById(id);

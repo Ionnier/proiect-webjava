@@ -1,0 +1,41 @@
+### Get all posts
+GET {{base_url}}/posts
+
+### Get one post
+GET {{base_url}}/posts/1
+
+### Create a new post
+POST {{base_url}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "categoryId": 1,
+    "title": "newpostnewpostnewpostnewpostnewpost",
+    "content": "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent"
+}
+
+### Edit a post
+PUT {{base_url}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id": 4,
+    "categoryId": 2,
+    "title": "newpostnewpostnewpostnewpostnewpost",
+    "content": "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent"
+}
+
+### Delete a post
+DELETE  {{base_url}}/posts/4
+Authorization: Bearer {{token}}
+
+### Add a comment
+POST {{base_url}}/posts/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBjdGkucm8iLCJpYXQiOjE3MDE0NDIxNDIsImV4cCI6MTcwMTQ0MzU4Mn0.ZPZoT0HaHuzOmhmM4YKZ3VAKkMZLSKA2UuCbvMZc2z4
+Content-Type: application/json
+
+{
+    "content": "sasdasdsadsa"
+}

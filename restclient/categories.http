@@ -1,0 +1,36 @@
+### Get all categories
+GET {{base_url}}/categories
+
+### Get one category
+GET {{base_url}}/categories/1
+
+### Add a new category
+POST {{base_url}}/categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "heysdsdsd",
+    "description": "heysdsdsdheysdsdsdheysdsdsdheysdsdsdheysdsdsd"
+}
+
+### Edit a category
+PUT {{base_url}}/categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": "1",
+    "name": "heysdsdsd",
+    "description": "heysdsdsdheysdsdsdheysdsdsdheysdsdsdheysdsdsd"
+}
+
+### Patch a category
+PATCH {{base_url}}/categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": "1",
+    "name": "newname"
+}

@@ -1,0 +1,22 @@
+### Get reports
+GET {{base_url}}/reports
+Authorization: Bearer {{token}}
+
+### Create report
+POST {{base_url}}/reports/comment/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "message": "Hello world"
+}
+
+### Fix report
+PATCH {{base_url}}/reports/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "message": "Hello world",
+    "resolution": "CLEANED"
+}

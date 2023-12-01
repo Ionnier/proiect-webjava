@@ -1,0 +1,17 @@
+### Sign Up
+POST {{base_url}}/signup
+Content-Type: application/json
+
+{
+    "email": "test@cti.ro",
+    "password": "ciscoconpa55"
+}
+
+### Login
+POST {{base_url}}/login
+Content-Type: application/json
+
+{
+    "email": "admin@cti.ro",
+    "password": "ciscoconpa55"
+}

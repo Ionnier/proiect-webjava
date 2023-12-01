@@ -35,6 +35,7 @@ public class User implements UserDetails {
 
     private final String password;
     @Email
+    @Column(unique=true)
     private final String email;
     private Date createdAt;
 
