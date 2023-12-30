@@ -2,6 +2,7 @@ package org.dbahrim.forum.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,12 +26,13 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private final Long id;
 
-    private Date createdAt;
+    public Date createdAt;
 
     @NotBlank
     public String content;
 
     @ManyToOne
+    @JoinColumn(referencedColumnName = "id", nullable = false, updatable = false)
     private User user;
 
     public Long postId;

@@ -1,17 +1,10 @@
 package org.dbahrim.forum;
 
-import org.dbahrim.forum.configuration.security.AuthenticationService;
+import org.dbahrim.forum.services.AuthenticationService;
 import org.dbahrim.forum.configuration.security.UserRequest;
-import org.hibernate.mapping.Map;
-import org.hibernate.sql.results.graph.collection.internal.MapInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import java.net.http.HttpHeaders;
-import java.util.Collections;
 
 @Service
 public class AuthenticationTestUtils {

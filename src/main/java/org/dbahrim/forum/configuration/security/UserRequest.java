@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public
-class UserRequest {
+public class UserRequest {
     @Email
-    final String email;
+    public final String email;
     @Size(min = 5, max = 20, message = "Password must have at least 5 characters and max 20 characters.")
-    final String password;
+    public final String password;
 }

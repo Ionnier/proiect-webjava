@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/docs/**").permitAll()
                 .requestMatchers("/api/docs").permitAll()
                 .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/api/top/**").permitAll()
                 .anyRequest().denyAll()
             )
             .csrf(CsrfConfigurer::disable)

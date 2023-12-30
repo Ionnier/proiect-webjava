@@ -13,10 +13,9 @@ import org.dbahrim.forum.data.PostRepository;
 import org.dbahrim.forum.models.Comment;
 import org.dbahrim.forum.models.Post;
 import org.dbahrim.forum.models.User;
+import org.dbahrim.forum.services.VoteService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @RestController
 @Slf4j
@@ -24,9 +23,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RequestMapping("/api/vote")
 public class VoteController {
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-
+    final VoteService voteService;
     public enum Types {
         COMMENT, POST
     }
@@ -61,54 +58,8 @@ public class VoteController {
     public void vote(@AuthenticationPrincipal User user,
                                    @PathVariable Types type,
                                    @PathVariable Way way,
-                                   @PathVariable Long id) throws ErrorController.NotFoundException, JsonProcessingException, ErrorController.BadRequest {
-        Post post = null;
-        Comment comment = null;
-
-        switch (type) {
-            case POST -> post = postRepository.findById(id).orElseThrow(ErrorController.NotFoundException::new);
-            case COMMENT -> comment = commentRepository.findById(id).orElseThrow(ErrorController.NotFoundException::new);
-        }
-
-        switch (way) {
-            case UP -> {
-                if (post != null) {
-                    post.dislikedBy.remove(user);
-                    post.upvotedBy.add(user);
-                }
-                if (comment != null) {
-                    comment.dislikedBy.remove(user);
-                    comment.upvotedBy.add(user);
-                }
-            }
-            case DOWN -> {
-                if (post != null) {
-                    post.upvotedBy.remove(user);
-                    post.dislikedBy.add(user);
-                }
-                if (comment != null) {
-                    comment.upvotedBy.remove(user);
-                    comment.dislikedBy.add(user);
-                }
-            }
-            case CANCEL -> {
-                if (post != null) {
-                    post.upvotedBy.remove(user);
-                    post.dislikedBy.remove(user);
-                }
-                if (comment != null) {
-                    comment.upvotedBy.remove(user);
-                    comment.dislikedBy.remove(user);
-                }
-            }
-        }
-        if (post != null) {
-            postRepository.save(post);
-        }
-
-        if (comment != null) {
-            commentRepository.save(comment);
-        }
+                                   @PathVariable Long id) throws ErrorController.NotFoundException {
+        voteService.voteOn(user, type, way, id);
     }
 
 }

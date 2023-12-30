@@ -27,7 +27,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Long id;
 
-    private Date createdAt;
+    public Date createdAt;
 
     @NotNull
     @NotBlank
@@ -95,7 +95,9 @@ public class Post implements Serializable {
 
     @PrePersist
     void prePersist() {
-        this.createdAt = new Date();
+        if (this.createdAt == null) {
+            this.createdAt = new Date();
+        }
     }
 
     @Data

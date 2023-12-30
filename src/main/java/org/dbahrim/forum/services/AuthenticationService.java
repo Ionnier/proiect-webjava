@@ -1,7 +1,9 @@
-package org.dbahrim.forum.configuration.security;
+package org.dbahrim.forum.services;
 
 import lombok.RequiredArgsConstructor;
 import org.dbahrim.forum.configuration.SecurityConfig;
+import org.dbahrim.forum.configuration.security.JwtService;
+import org.dbahrim.forum.configuration.security.UserRequest;
 import org.dbahrim.forum.data.UserRepository;
 import org.dbahrim.forum.models.User;
 import org.springframework.security.authentication.AuthenticationManager;

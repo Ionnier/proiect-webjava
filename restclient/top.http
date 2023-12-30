@@ -1,0 +1,9 @@
+### Top users (default today)
+GET {{base_url}}/top/users
+
+
+### Top posts (default today)
+GET {{base_url}}/top/posts
+
+### Top posts month (|| today || week)
+GET {{base_url}}/top/posts?when=month

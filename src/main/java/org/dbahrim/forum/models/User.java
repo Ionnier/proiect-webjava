@@ -1,12 +1,11 @@
 package org.dbahrim.forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.dbahrim.forum.configuration.SecurityConfig;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +23,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @RequiredArgsConstructor
+@JsonIgnoreProperties({"authorities"})
 public class User implements UserDetails {
 
     @Serial

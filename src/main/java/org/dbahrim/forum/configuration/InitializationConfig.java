@@ -16,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 @RequiredArgsConstructor
 public class InitializationConfig {
@@ -41,9 +45,14 @@ public class InitializationConfig {
     }
 
     private void createPost(Long categoryId, String userMail, String title, String content) throws ErrorController.NotFoundException {
+        createPost(categoryId, userMail, title, content, null);
+    }
+
+    private void createPost(Long categoryId, String userMail, String title, String content, Date date) throws ErrorController.NotFoundException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(ErrorController.NotFoundException::new);
         User user = userRepository.findByEmail(userMail);
         Post post = new Post(category, user, content, title);
+        post.createdAt = date;
         postRepository.save(post);
     }
 
@@ -84,12 +93,23 @@ public class InitializationConfig {
             createPost(1L, "user@cti.ro", "Staying Zen in a Hectic World",
                     "Hello mindful souls! Life can be chaotic, but finding inner peace is essential. What are your go-to mindfulness practices? Let's swap tips and support each other on our journey to tranquility.");
 
-            createComment(1L, "user1@cti.ro", "Great choice on diving into machine learning! If you're into books, 'Hands-On Machine Learning with Scikit-Learn and TensorFlow' is a must-read.");
-            createComment(1L, "user1@cti.ro", "I started with online courses on platforms like Coursera and Udacity. They offer a structured approach and hands-on projects. Good luck on your journey!");
-            createComment(1L, "user1@cti.ro", "Machine learning is a vast field! Don't hesitate to ask questions. The community here is always ready to help. Enjoy the learning process!");
-            createComment(1L, "user1@cti.ro", "Moroccan tagine sounds delicious! Have you tried experimenting with other North African cuisines? I'm curious to hear about your culinary adventures!");
-            createComment(1L, "user1@cti.ro", "Mindfulness is key in today's fast-paced world. I find meditation and nature walks incredibly helpful. What about you? Share your favorite mindfulness practices!");
+            Instant now = Instant.now();
+            Date dateTwoDaysAgo = Date.from(now.minusMillis(TimeUnit.DAYS.toMillis(2)));
+            Date dateEightDaysAgo = Date.from(now.minusMillis(TimeUnit.DAYS.toMillis(8)));
+            Date lastMonth = Date.from(now.minusMillis(TimeUnit.DAYS.toMillis(31)));
 
+            createPost(1L, "user@cti.ro", "Whatever2Whatever2",
+                    "Whatever2Whatever2Whatever2Whatever2Whatever2Whatever2Whatever2Whatever2Whatever2Whatever2", dateTwoDaysAgo);
+            createPost(1L, "user@cti.ro", "Whatever3Whatever3",
+                    "Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3Whatever3", dateEightDaysAgo);
+            createPost(1L, "user@cti.ro", "Whatever4Whatever4",
+                    "Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4Whatever4", lastMonth);
+
+            createComment(1L, "user@cti.ro", "Great choice on diving into machine learning! If you're into books, 'Hands-On Machine Learning with Scikit-Learn and TensorFlow' is a must-read.");
+            createComment(1L, "user@cti.ro", "I started with online courses on platforms like Coursera and Udacity. They offer a structured approach and hands-on projects. Good luck on your journey!");
+            createComment(1L, "user@cti.ro", "Machine learning is a vast field! Don't hesitate to ask questions. The community here is always ready to help. Enjoy the learning process!");
+            createComment(1L, "user@cti.ro", "Moroccan tagine sounds delicious! Have you tried experimenting with other North African cuisines? I'm curious to hear about your culinary adventures!");
+            createComment(1L, "admin@cti.ro", "Mindfulness is key in today's fast-paced world. I find meditation and nature walks incredibly helpful. What about you? Share your favorite mindfulness practices!");
         };
     }
 }

@@ -2,7 +2,7 @@
 GET {{base_url}}/posts
 
 ### Get one post
-GET {{base_url}}/posts/1
+GET {{base_url}}/posts/3
 
 ### Create a new post
 POST {{base_url}}/posts
@@ -32,8 +32,8 @@ DELETE  {{base_url}}/posts/4
 Authorization: Bearer {{token}}
 
 ### Add a comment
-POST {{base_url}}/posts/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBjdGkucm8iLCJpYXQiOjE3MDE0NDIxNDIsImV4cCI6MTcwMTQ0MzU4Mn0.ZPZoT0HaHuzOmhmM4YKZ3VAKkMZLSKA2UuCbvMZc2z4
+POST {{base_url}}/posts/3
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
