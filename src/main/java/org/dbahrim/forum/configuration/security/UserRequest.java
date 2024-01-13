@@ -2,11 +2,13 @@ package org.dbahrim.forum.configuration.security;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
+@Builder(toBuilder = true)
 public class UserRequest {
     @Email
     public final String email;

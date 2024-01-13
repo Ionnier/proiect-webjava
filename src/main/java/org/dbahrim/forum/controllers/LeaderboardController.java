@@ -2,14 +2,12 @@ package org.dbahrim.forum.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.dbahrim.forum.models.Post;
-import org.dbahrim.forum.models.Report;
 import org.dbahrim.forum.models.User;
 import org.dbahrim.forum.services.LeaderboardService;
 import org.springframework.http.HttpStatusCode;

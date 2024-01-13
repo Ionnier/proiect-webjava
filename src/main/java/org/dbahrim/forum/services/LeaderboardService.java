@@ -2,7 +2,6 @@ package org.dbahrim.forum.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.tree.Tree;
 import org.dbahrim.forum.controllers.ErrorController;
 import org.dbahrim.forum.data.CommentRepository;
 import org.dbahrim.forum.data.PostRepository;
@@ -13,13 +12,11 @@ import org.dbahrim.forum.models.Post;
 import org.dbahrim.forum.models.Report;
 import org.dbahrim.forum.models.User;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 
 
 @Service

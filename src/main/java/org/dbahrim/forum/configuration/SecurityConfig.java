@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/categories/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/reports/**").hasRole(ROLE_ADMIN)
                 .requestMatchers("/api/vote/**").authenticated()
+                .requestMatchers("/api/events/**").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-ui**").permitAll()
                 .requestMatchers("/" + RestConfiguration.BASE_PATH + "/**").hasRole(ROLE_ADMIN)

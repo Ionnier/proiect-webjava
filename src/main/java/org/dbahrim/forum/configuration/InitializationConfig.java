@@ -3,12 +3,10 @@ package org.dbahrim.forum.configuration;
 import lombok.RequiredArgsConstructor;
 import org.dbahrim.forum.controllers.ErrorController;
 import org.dbahrim.forum.data.CategoryRepository;
+import org.dbahrim.forum.data.EventRepository;
 import org.dbahrim.forum.data.PostRepository;
 import org.dbahrim.forum.data.UserRepository;
-import org.dbahrim.forum.models.Category;
-import org.dbahrim.forum.models.Comment;
-import org.dbahrim.forum.models.Post;
-import org.dbahrim.forum.models.User;
+import org.dbahrim.forum.models.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +31,7 @@ public class InitializationConfig {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final DataSourceProperties dataSourceProperties;
+    private final EventRepository eventRepository;
 
     private void createUser(String password, String email, String role) {
         User user = new User(passwordEncoder.encode(password), email);
@@ -110,6 +110,8 @@ public class InitializationConfig {
             createComment(1L, "user@cti.ro", "Machine learning is a vast field! Don't hesitate to ask questions. The community here is always ready to help. Enjoy the learning process!");
             createComment(1L, "user@cti.ro", "Moroccan tagine sounds delicious! Have you tried experimenting with other North African cuisines? I'm curious to hear about your culinary adventures!");
             createComment(1L, "admin@cti.ro", "Mindfulness is key in today's fast-paced world. I find meditation and nature walks incredibly helpful. What about you? Share your favorite mindfulness practices!");
+
+            eventRepository.save(new Event(null, "New title", Instant.now().toEpochMilli(), userRepository.findByEmail("user@cti.ro")));
         };
     }
 }

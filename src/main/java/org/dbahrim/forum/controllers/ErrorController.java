@@ -4,6 +4,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -47,12 +50,35 @@ public class ErrorController
             httpStatus = HttpStatus.NOT_FOUND;
         } else if (ex instanceof BadRequest) {
             httpStatus = HttpStatus.BAD_REQUEST;
+        } else if (ex instanceof Forbidden) {
+            httpStatus = HttpStatus.FORBIDDEN;
         }
         return handleExceptionInternal(ex, null,
                 new HttpHeaders(), httpStatus, request);
     }
 
+    @ExceptionHandler(value = {MessagedException.class})
+    protected ResponseEntity<Object> simpleCodeSetter (
+            MessagedException ex, WebRequest request) {
+        return handleExceptionInternal(ex, new MessageClass(ex.message),
+                new HttpHeaders(), ex.httpStatus, request);
+    }
+
     private abstract static class SimpleCodeSetter extends Exception {};
     public static class NotFoundException extends SimpleCodeSetter { }
     public static class BadRequest extends SimpleCodeSetter { }
+    public static class Forbidden extends SimpleCodeSetter { }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MessageClass {
+        public String message;
+    }
+
+    @AllArgsConstructor
+    public static class MessagedException extends Exception {
+        public String message;
+        public HttpStatus httpStatus;
+    }
 }

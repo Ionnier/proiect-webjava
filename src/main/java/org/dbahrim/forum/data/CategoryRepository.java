@@ -7,7 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource
 @Hidden
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     List<Category> findByName(String name);
