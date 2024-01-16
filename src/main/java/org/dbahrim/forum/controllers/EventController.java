@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.dbahrim.forum.models.Event;
 import org.dbahrim.forum.models.Post;
 import org.dbahrim.forum.models.User;
+import org.dbahrim.forum.models.dtos.EventPost;
+import org.dbahrim.forum.models.mappers.EventMapper;
 import org.dbahrim.forum.services.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventService eventService;
+    private final EventMapper eventMapper;
 
     @GetMapping
     @Operation(summary = "Get all events")
@@ -67,9 +70,8 @@ public class EventController {
                     ),
             }
     )
-    Event postEvent(@AuthenticationPrincipal User user, @RequestBody @Valid Event requestEvent) throws ErrorController.MessagedException {
-        Event newEvent = new Event();
-        newEvent.setTitle(requestEvent.getTitle());
+    Event postEvent(@AuthenticationPrincipal User user, @RequestBody @Valid EventPost requestEvent) throws ErrorController.MessagedException {
+        Event newEvent = eventMapper.sourceToDestination(requestEvent);
         newEvent.setCreatedBy(user);
         newEvent.setTimestamp(requestEvent.getTimestamp());
         return eventService.createEvent(newEvent);
