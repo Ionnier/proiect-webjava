@@ -70,6 +70,5 @@ public class TestAuthenticationService {
             authenticationService.signIn(validRequest);
         });
         Assertions.assertEquals("Invalid email or password", exception.getMessage());
-
     }
 }

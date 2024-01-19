@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.assertj.core.util.VisibleForTesting;
 import org.dbahrim.forum.controllers.ErrorController;
 
 import java.util.List;
@@ -32,7 +33,8 @@ public class Event {
     public User createdBy;
 
     @PrePersist
-    void preCreate() throws ErrorController.BadRequest {
+    @VisibleForTesting
+    public void preCreate() throws ErrorController.BadRequest {
         if (createdBy == null) {
             throw new ErrorController.BadRequest();
         }

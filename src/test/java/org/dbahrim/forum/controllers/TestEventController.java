@@ -153,6 +153,16 @@ public class TestEventController {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void deleteAnotherId() throws Exception {
+        postAsUserWorks();
+        mvc.perform(MockMvcRequestBuilders
+                        .delete("/api/events/1")
+                        .header(testUtils.authorization, testUtils.admin())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
 
 
 }

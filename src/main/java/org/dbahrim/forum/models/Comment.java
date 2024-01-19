@@ -53,7 +53,7 @@ public class Comment implements Serializable {
     @Data
     @NoArgsConstructor(access= AccessLevel.PUBLIC, force=true)
     public static class CommentPost {
-        public final String content;
+        public String content;
     }
 }
 

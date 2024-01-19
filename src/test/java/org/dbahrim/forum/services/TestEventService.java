@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -33,6 +34,9 @@ public class TestEventService {
 
     @Mock
     User user;
+
+    @Mock
+    User user2;
 
     private final Event validEventCreate = new Event(null, "A valid event title", Instant.now().toEpochMilli(), user);
 
@@ -156,6 +160,17 @@ public class TestEventService {
     void deleteWithNullIdReturnsBadRequest() throws Exception {
         assertThrows(ErrorController.BadRequest.class, () -> {
             eventService.deleteEventWithId(user, null);
+        });
+    }
+
+    @Test
+    void deletwWithAnotherUser() throws Exception {
+        when(eventRepository.findById(any())).thenReturn(Optional.of(validEventCreate.toBuilder().id(1L).createdBy(user).build()));
+        when(user.getId()).thenReturn(1L);
+        when(user2.getId()).thenReturn(2L);
+
+        assertThrows(ErrorController.Forbidden.class, () -> {
+            eventService.deleteEventWithId(user2, 1L);
         });
     }
 }

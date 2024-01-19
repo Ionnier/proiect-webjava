@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.assertj.core.util.VisibleForTesting;
 import org.dbahrim.forum.configuration.SecurityConfig;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,7 +40,8 @@ public class User implements UserDetails {
     private final String email;
     private Date createdAt;
 
-    private String role;
+    @VisibleForTesting
+    public String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,7 +74,8 @@ public class User implements UserDetails {
     }
 
     @PrePersist
-    void prePersist() {
+    @VisibleForTesting
+    public void prePersist() {
         this.createdAt = new Date();
         if (!StringUtils.hasText(role)) {
             role = SecurityConfig.ROLE_USER;

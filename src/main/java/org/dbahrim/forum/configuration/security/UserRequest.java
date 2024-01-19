@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-@Builder(toBuilder = true)
 public class UserRequest {
     @Email
     public final String email;
