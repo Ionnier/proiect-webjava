@@ -40,7 +40,7 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Event.class)) })})
-    List<Event> getAll() {
+    public List<Event> getAll() {
         return eventService.getAll();
     }
 

@@ -1,0 +1,16 @@
+### Get all events
+GET {{base_url}}/events
+
+### Add an event
+POST {{base_url}}/events
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "sasdasdsadsa",
+    "timestamp": "0"
+}
+
+### Delete event
+DELETE  {{base_url}}/events/3
+Authorization: Bearer {{token}}
